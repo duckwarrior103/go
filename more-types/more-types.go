@@ -1,6 +1,8 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
 func pointers() {
 	i := 42
@@ -45,9 +47,59 @@ func arrays() {
 	fmt.Println(a)
 }
 
+func slices() {
+	arr := [5]int{1, 2, 3, 4, 5}
+	slice := arr[:3] // Slice the first three elements
+
+	fmt.Println(arr)
+	fmt.Printf("Before append: len=%d cap=%d %v\n", len(slice), cap(slice), slice)
+
+	// Append elements within capacity
+	slice = append(slice, 6, 7)
+	fmt.Println(arr)
+	fmt.Printf("After append: len=%d cap=%d %v\n", len(slice), cap(slice), slice)
+
+	// declaring strings with string literal
+	q := []int{2, 3, 5, 7, 11, 13}
+	fmt.Println(q, len(q), cap(q))
+	q = append(q, 18, 19, 20)
+	fmt.Println(q, len(q), cap(q))
+
+	// creating slices with make
+	// creates array with length of 5
+	aMadeWithMake := make([]int, 5)
+	fmt.Println(aMadeWithMake)
+	// Specify capacity with make
+	bMadeWithMake := make([]int, 0, 5) // slice has length 0, but is referencing an array with size 5 (cap 5)
+	// underlying array: [0,0,0,0,0], slice: []
+	fmt.Println(bMadeWithMake) // should be an empty slice
+}
+
+func loopOverSliceOfNumbers() {
+	numbers := []int{1, 3, 5, 7, 9}
+	for i, v := range numbers {
+		fmt.Printf("Element %d is: %d\n", i, v)
+	}
+}
+
+func Pic(dx, dy int) [][]uint8 {
+	thingToReturn := make([][]uint8, dy, dy)
+	for y := range thingToReturn {
+		row := make([]uint8, dx, dx)
+		for x := range thingToReturn[y] {
+			thingToReturn[y][x] = uint8((x + y) / 2)
+		}
+		thingToReturn[y] = row
+	}
+	return thingToReturn
+}
+
 func main() {
-	fmt.Println("Hello, World!")
-	pointers()
-	structs()
-	arrays()
+	// fmt.Println("Hello, World!")
+	// pointers()
+	// structs()
+	// arrays()
+	// slices()
+	// loopOverSliceOfNumbers()
+	// pic.Show(Pic)
 }
