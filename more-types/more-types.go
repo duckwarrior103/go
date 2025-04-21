@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"math"
+	"strings"
 )
 
 func pointers() {
@@ -94,6 +96,83 @@ func Pic(dx, dy int) [][]uint8 {
 	return thingToReturn
 }
 
+func maps() {
+	// we want to create a location to vertex map
+	type Vertex struct {
+		Lat, Long float64
+	}
+	m := make(map[string]Vertex)
+	m["Bell Labs"] = Vertex{
+		40.68433, -74.39967,
+	}
+	fmt.Println(m)
+
+	// map literals
+	m2 := map[string]Vertex{
+		"Bell Labs": Vertex{
+			40.68433, -74.39967,
+		},
+		"Google": Vertex{
+			37.42202, -122.08408},
+	}
+	fmt.Println(m2)
+
+	// test key is present
+	elem, ok := m2["Apple"]
+	fmt.Println(elem, ok) // element is nil of map's element type
+	//deleting a key
+	delete(m2, "Google")
+}
+
+func countWords(s string) map[string]int {
+	wordCountMap := make(map[string]int)
+	words := strings.Split(s, " ")
+	for _, word := range words {
+		wordCountMap[word]++
+	}
+	return wordCountMap
+}
+
+func compute3And4(fn func(float64, float64) float64) float64 {
+	return fn(3, 4)
+}
+
+func functionValues() {
+	hypot := func(x, y float64) float64 {
+		return math.Sqrt(x*x + y*y)
+	}
+	fmt.Println(compute3And4(hypot))
+}
+
+// what is a closure?
+// A closure is a "function value e.g. hypot := from above" which references a variable outside of func body
+
+func adder() func(int) int {
+	sum := 1
+	// returning a function value: closure, a function that takes in int and returns int
+	return func(x int) int {
+		sum += x
+		return sum
+	}
+}
+
+func fibonacci() func() int {
+	current := 0
+	next := 0
+	return func() int {
+		if next == 0 {
+			next = 1
+			return current
+		}
+		temp := current
+		// get  next value in line and set it current
+		current = next
+		// compute the new next value in line
+		next = temp + next
+		return current
+	}
+}
+
 func main() {
 	// fmt.Println("Hello, World!")
 	// pointers()
@@ -102,4 +181,11 @@ func main() {
 	// slices()
 	// loopOverSliceOfNumbers()
 	// pic.Show(Pic)
+	// maps()
+	// fmt.Println(countWords("I ate a donut. Then I ate another donut."))
+	// functionValues()
+	f := fibonacci()
+	for i := 0; i < 10; i++ {
+		fmt.Println(f())
+	}
 }
